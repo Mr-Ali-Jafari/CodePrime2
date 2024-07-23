@@ -1,0 +1,79 @@
+{% extends '../base.html' %}
+{% block title %}قوانین و فرم ثبت‌نام{% endblock %}
+{% load humanize %}
+{% block body %}
+
+
+<style>
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+        background-color: #99b0c9;
+        color: rgb(0, 0, 0);
+        font-weight: bold;
+        text-align: center;
+    }
+    .rule ul {
+        padding: 20px;
+    }
+    .rule li {
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .form form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mb-4">
+            <div class="card rule">
+                <div class="card-header">قوانین</div>
+                <div class="card-body">
+                    <ul>
+                        <li>اگر رسید فیک تحویل داده شد و حساب چک شد اکانت شما بن خواهد شد</li>
+                        <li>اگر تا بعد از 24 ساعت پکیج برای شما فعال نشده بود به تلگرام مراجعه فرمایید</li>
+                        <li>پخش ویدیوها غیر قانونی و شرعا حرام می‌باشد و با آن برخورد قانونی خواهد شد</li>
+                        <li>پول پکیجی که خریداری شده است پس داده نخواهد شد</li>
+                        <li>از گذاشتن کامنت‌های بی‌مورد پرهیز کنید؛ در این صورت اکانت شما حذف خواهد شد</li>
+                    </ul>
+                    <hr>
+                    <div class="card-header">قیمت و اطلاعات محصول</div>
+                    <ul>
+                        <li>مدرس : {{product.user.first_name}} {{ product.user.last_name }}</li>
+                        <li style="color: green;">قیمت : {{product.price|intcomma}} تومان</li>
+                        <li>نام دوره : {{product.title}}</li>
+                        <p>توجه: قیمت به تومان است نه ریال در واریز پول دقت نمایید</p>
+                        <p>شماره کارت :</p><strong>6280-2313-9030-5786</strong>
+                        <p>زهره مستاجران</p>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card form">
+                <div class="card-header">فرم ثبت‌نام</div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="payment_receipt">عکس رسید واریزی:</label>
+                        {{ form.payment_receipt }}
+                        <label for="payment_receipt">عکس sms واریزی:</label>
+                        {{ form.payment_sms }}
+                        <button type="submit" class="btn btn-primary btn-block">ثبت</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br>
+{% endblock %}

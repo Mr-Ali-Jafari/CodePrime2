@@ -1,0 +1,40 @@
+
+
+<style>
+    .messages {
+        list-style-type: none;
+        padding: 0;
+        max-width: 600px;
+        direction: rtl;
+        margin: auto;
+    }
+
+    .messages li {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .message-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .message-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+</style>
+
+    <div class="">
+        {% if messages %}
+        <br><br>
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="bg-{{ message.tags }}">
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}<strong>مهم:</strong> {% endif %}
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}

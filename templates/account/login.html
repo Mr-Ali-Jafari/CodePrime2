@@ -1,0 +1,86 @@
+{% extends '../base.html' %}
+{% block title %}لاگین{% endblock %}
+{% load humanize %}
+{% block body %}
+<style>
+    .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin-top: 50px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 10px;
+    background-color: #5cb85c;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #4cae4c;
+}
+
+p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+a {
+    color: #5bc0de;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+</style>
+
+
+
+<div class="container">
+    <h2>ورود</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">نام کاربری:</label>
+        {{ form.username }}
+        <label for="password">رمز عبور:</label>
+        {{ form.password }}
+
+        <button type="submit">ورود</button>
+    </form>
+    <p><a href="{% url 'register' %}">اینجا یکی بسازید</a> اگر اکانت ندارید </p>
+</div>
+
+<br><br><br>
+<br><br><br>
+
+{% endblock %}

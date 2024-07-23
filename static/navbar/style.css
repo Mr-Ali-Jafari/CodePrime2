@@ -1,0 +1,20 @@
+.navbar{
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.1px);
+    -webkit-backdrop-filter: blur(8.1px);
+}
+.search{
+    border-radius: 100%;
+    padding: 5px;
+    position: absolute;
+    background-color: #292990;
+    color: white;
+}
+.search-input{
+    border-radius: 50px;
+}
+.search:hover{
+    color: black;
+    border: solid 1px #292990;
+}

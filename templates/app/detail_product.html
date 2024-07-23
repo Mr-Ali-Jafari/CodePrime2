@@ -1,0 +1,260 @@
+{% extends '../base.html' %}
+{% block title %}{{md.title}}{% endblock %}
+{% load humanize %}
+{% block header %}
+<link rel="stylesheet" href="https://cdn.plyr.io/2.0.15/plyr.css">
+{% endblock %}
+{% block body %}
+<style>
+    .comments-section {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+.comments-section h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+    color: #333;
+}
+
+.comments-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.comments-section li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.comments-section li:last-child {
+    border-bottom: none;
+}
+
+.comments-section strong {
+    color: #007bff;
+}
+
+.comments-section p {
+    font-style: italic;
+    color: #666;
+}
+
+.comments-section ul ul {
+    margin-left: 20px;
+    padding-left: 0;
+}
+
+.comments-section ul ul li {
+    border-bottom: 1px solid #ddd;
+    background-color: #f1f1f1;
+    padding: 8px;
+}
+
+.comments-section ul ul li:last-child {
+    border-bottom: none;
+}
+    .flex-container{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .c1{
+        flex: 1 1 800px;
+        direction: rtl;
+        border-radius: 0;
+        margin: 10px;
+    }
+    .c2{
+        flex: 1 1 800px;
+        direction: rtl;
+        border-radius: 0;
+        margin: 10px;
+    }
+    .vid{
+        margin: 30px;
+    }
+    .tag{
+        margin: 30px;
+        color: orange;
+    }
+    .desc{
+        margin-right: 60px;
+    }
+    .c3{
+        width: 500px;
+        text-align: center;
+        margin: auto;
+        border-radius: 0;
+        padding: 20px;
+    }
+    @media only screen and (max-width: 600px) {
+        .flex-container {
+            flex-direction: column-reverse;
+        }
+        .c1, .c2, .c3 {
+            flex: 1 1 100%;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .vid, .tag, .desc {
+            margin: 15px;
+        }
+        .desc {
+            margin-right: 15px;
+        }
+        .c3 {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="flex-container">
+    <div class="card c1">
+        <div class="vid">
+            <center>
+                <video id="plyr-youtube" src="{{md.intro.url}}" controls></video>
+            </center>
+        </div>
+        <div class="tag">
+            <h2># {{md.title}}</h2>
+            <p>{{md.date}}</p>
+        </div>
+        <div class="desc">
+            <h5>{{md.desc|safe}}</h5>
+        </div>
+        <div class="parts">
+            <ul>
+                {% for i in vid %}
+                    <div class="videos card c2">
+                        {% if p %}
+                            <strong style="margin: 20px;">
+                                <a href="{% url 'video_detail' i.id %}">{{i.title}}</a>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2"/>
+                                </svg>
+                            </strong>
+                        {% elif request.user == md.user %}
+                            <strong style="margin: 20px;">
+                                <a href="{% url 'video_detail' i.id %}">{{i.title}}</a>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2"/>
+                                </svg>
+                            </strong>
+                        {% else %}
+                            <strong style="margin: 20px;">
+                                {{i.title}}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                                    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
+                                </svg>
+                            </strong>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% if not p and md.is_active and request.user.is_authenticated and md.user != request.user %}
+            <div class="card c3">
+                <strong>خرید کردن {{md.title}}</strong>
+                <p>مبلغ : {{md.price|intcomma}} تومان</p>
+
+
+                <button class="btn btn-success">
+                    <a href="{% url 'add_to_cart' md.id %}" style="color: white; text-decoration: none;">
+                        افزودن به سبد خرید
+                    </a>
+                </button>
+            </div>
+        {% else %}
+            <div class="card c3">
+                <strong>خرید کردن {{md.title}}</strong>
+                <p>مبلغ : {{md.price|intcomma}} تومان</p>
+                <button class="btn btn-success disabled">
+                    <a class="disabled" style="color: white; text-decoration: none;">
+                        قابلیت خرید وجود ندارد
+                    </a>
+                </button>
+            </div>
+        {% endif %}
+        <br>
+    </div>
+    {% include 'app/profile_teacher.html' %}
+</div>
+
+<br><br><br>
+
+
+<div class="container-fluid">
+<div class="row">
+    <div class="col-md-8">
+        <h3>کامنت ها</h3>
+        <div class="mt-4">
+            {% for comment in comments %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ comment.user.username }}</h5>
+                        {% if request.user.is_superuser %}
+                        <a href="{% url 'reply' comment.id %}" class="btn btn-dark" style="float: left;">ریپلای</a>
+                        {% endif %}
+                        <p class="card-text">{{ comment.text }}</p>
+                        <small class="text-muted">{{ comment.date }}</small>
+                        <div class="mt-2">
+                            {% if comment.replies.all %}
+                                <div class="ml-4 mt-2">
+                                    {% for reply in comment.replies.all %}
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <h6 class="card-subtitle mb-2 text-muted">{{ reply.user.username }}</h6>
+                                                <p class="card-text">{{ reply.text }}</p>
+                                                <small class="text-muted">{{ reply.date }}</small>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No comments yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <!-- You can add more information here like product details, related products, etc. -->
+    </div>
+</div>
+</div>
+
+<br><br><br>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="card" style="max-width: 600px; margin: auto; padding: 10px;">
+        <label for="text">متن :</label>
+        {{form.text}}
+        <br><br>
+        <center>
+            <input type="submit" class="btn btn-success" style="margin: auto; text-align: center;" value="ثبت کامنت">
+        </center>
+    </div>
+</form>
+<br><br><br><br>
+
+
+<script src="https://cdn.plyr.io/2.0.15/plyr.js"></script>
+<script>
+    plyr.setup("#plyr-youtube");
+</script>
+{% endblock %}

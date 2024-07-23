@@ -1,0 +1,75 @@
+{% extends '../base.html' %}
+{% block title %}{{vid.title}}{% endblock %}
+{% block header %}
+<link rel="stylesheet" href="https://cdn.plyr.io/2.0.15/plyr.css">
+{% endblock %}
+{% block body %}
+<style>
+    .flex-container{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .c1{
+        flex: 1 1 800px;
+        direction: rtl;
+        border-radius: 0;
+        margin: 10px;
+    }
+    .c2{
+        flex: 1 1 800px;
+        direction: rtl;
+        border-radius: 0;
+        margin: 10px;
+    }
+    .blog{
+        margin: 30px;
+    }
+    .tag{
+        margin: 30px;
+        color: orange;
+    }
+    .desc{
+        margin-right: 60px;
+    }
+    @media only screen and (max-width: 600px) {
+        .flex-container {
+            flex-direction: column-reverse;
+        }
+        .c1, .c2 {
+            flex: 1 1 100%;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .md, .tag, .desc {
+            margin: 15px;
+        }
+        .desc {
+            margin-right: 15px;
+        }
+    }
+</style>
+
+<div class="flex-container">
+    <div class="card c1">
+        <div class="blog">
+            <center>
+                <img src="{{md.img.urls}}" alt="">
+            </center>
+        </div>
+        <div class="tag">
+            <h2># {{md.title}}</h2>
+            <p>{{md.date}}</p>
+        </div>
+        <div class="desc">
+            <h5>{{md.desc|safe}}</h5>
+        </div>
+    </div>
+    {% include 'app/profile_teacher.html' %}
+</div>
+
+<script src="https://cdn.plyr.io/2.0.15/plyr.js"></script>
+<script>
+    plyr.setup("#plyr-youtube");
+</script>
+{% endblock %}

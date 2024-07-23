@@ -1,0 +1,132 @@
+.flex-c{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap; 
+}
+.right-side{
+    text-align: center;
+    justify-content: right;
+    margin: 40px;
+}
+
+.left-side{
+    justify-content: left;
+}
+.texts{
+    margin: 50px;
+}
+.h1{
+    color: rgba(32, 32, 139, 0.959);
+}
+.h5{
+    max-width: 400px;
+    text-align: center;
+}
+.course-btn{
+    background-color: blue;
+    color: white;
+    width: 100%; 
+    max-width: 400px; 
+}
+.course-btn:hover{
+    border: 1px solid blue;
+    color: rgb(0, 0, 0);
+}
+.img-left{
+    width: 100%; 
+    max-width: 650px; 
+    border-radius: 10px;
+    transition: all 0.5s;
+}
+.img-left:hover{
+    margin: 3px;
+    transition: all 0.5s;
+}
+
+.course{
+    max-width: 400px;
+    margin: auto;
+    margin-bottom: 10px;
+    
+}
+.content-cat {
+    position: relative;
+}
+
+.c-c {
+    position: relative;
+    z-index: 1;
+    background-color: #292990;
+    padding: 20px;
+    margin-bottom: 0; 
+}
+
+svg.f {
+    fill: #292990;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 0;
+    transform: translateY(-10px); 
+    height: 40px;
+}
+
+
+svg.f2 {
+    fill: #292990;
+    transform: rotate(180deg);
+    width: 100%;
+    height: auto;
+    z-index: 0;
+    height: 40px;
+}
+.c-cat{
+    background: rgb(255, 255, 255);
+    border-radius: 5px;
+    backdrop-filter: blur(5.5px);
+    -webkit-backdrop-filter: blur(5.5px);
+    width: 10rem;
+    text-align: center;
+    
+}
+.c-cat{
+    margin: 10px;
+}
+.flex{
+    text-align: center;
+}
+.icon-buy{
+    position: absolute;
+    background-color: rgb(255, 153, 0);
+    color: white;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 100%;
+}
+@media only screen and (max-width: 600px) {
+    .flex-c {
+        flex-direction:column-reverse; 
+        align-items: center; 
+    }
+    .right-side, .left-side {
+        margin: 20px; 
+    }
+    .texts {
+        margin: 20px; 
+    }
+    .flex{
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+    }
+    .img-left{
+        width: 100%;
+        max-width: 400px;
+    }
+    .course-btn {
+        width: 100%; 
+    }
+}

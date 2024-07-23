@@ -1,0 +1,69 @@
+{% extends '../base.html' %}
+{% block title %}مدیریت پرداخت ها{% endblock %}
+{% load humanize %}
+{% block body %}
+
+
+<style>
+
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-top: 20px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 20px auto;
+        max-width: 800px;
+    }
+
+    .purchases {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .no-purchases {
+        text-align: center;
+        color: #888;
+        padding: 20px;
+        font-size: 16px;
+    }
+</style>
+
+
+
+<h1>خرید های غیر فعال</h1>
+<ul>
+    {% for i in purchases %}
+        <li class="purchases">
+            <strong>مشتری : {{i.user.first_name}} {{ i.last_name }}</strong>
+            <p>اسم پکیج خریداری شده: {{i.package.title}}</p>
+            <a href="{{i.payment_receipt.url}}">لینک رسید</a>
+            <a href="{{i.payment_sms.url}}">لینک اس ام اس</a>
+            <a href="{% url 'activate_purchase' i.id %}">Activate</a>
+        </li>
+    {% empty %}
+        <li class="purchases">هیج خریدی یافت نشد</li>
+    {% endfor %}
+</ul>
+<br><br><br><br><br><br>
+{% endblock %}

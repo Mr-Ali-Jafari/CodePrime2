@@ -1,0 +1,50 @@
+{% extends '../base.html' %}
+{% block title %}دیدن سبد خرید{% endblock %}
+{% block body %}
+
+<style>
+    .card{
+        max-width: 800px;
+        margin: auto;
+        border-radius: 0;
+        text-align: center;
+        padding: 30px;
+    }
+    .flex{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .btn{
+        margin: 10px;
+    }
+</style>
+
+
+{% for i in cart_items %}
+    <div class="card">
+        <strong> مدرس : {{i.package.user.first_name}} {{i.package.user.last_name}}</strong><strong>موضوع :{{i.package.title}}</strong>
+        <br>
+        <div class="flex">
+            <button class="btn btn-success">
+                <a href="{% url 'purchase' i.package.id %}" style="color: white; text-decoration: none;">خرید</a>
+            </button>
+            <br>
+            <button class="btn btn-danger">
+                <a href="{% url 'remove_from_cart' i.id %}" style="color: white; text-decoration: none;">حذف</a>
+            </button>
+        </div>
+    </div>
+
+{% empty %}
+<br>
+<h2 style="text-align: center;">لیست خرید شما خالی است</h2>
+{% endfor %}
+
+<br><br><br>
+<br><br><br><br><br><br>    
+     
+
+
+
+{% endblock %}

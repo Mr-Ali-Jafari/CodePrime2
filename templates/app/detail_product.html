@@ -168,7 +168,7 @@
             <div class="card c3">
                 <strong>خرید کردن {{md.title}}</strong>
                 <p>مبلغ : {{md.price|intcomma}} تومان</p>
-
+                <p>تعداد هنرجو ها: {{student}}</p>
 
                 <button class="btn btn-success">
                     <a href="{% url 'add_to_cart' md.id %}" style="color: white; text-decoration: none;">
@@ -180,6 +180,7 @@
             <div class="card c3">
                 <strong>خرید کردن {{md.title}}</strong>
                 <p>مبلغ : {{md.price|intcomma}} تومان</p>
+                <p>تعداد هنرجو ها: {{student}}</p>
                 <button class="btn btn-success disabled">
                     <a class="disabled" style="color: white; text-decoration: none;">
                         قابلیت خرید وجود ندارد

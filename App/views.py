@@ -52,6 +52,7 @@ def purchase_history(request):
 def detail(request, slug):
     md = get_object_or_404(models.Product, slug=slug)
     p = models.Purchase.objects.filter(package=md)
+    count = models.Purchase.objects.filter(package=md,is_active=True).count()
     comment_md = models.Comment.objects.filter(product=md, is_active=True)
     vid = models.Video_Product.objects.filter(product=md, is_active=True)
 
@@ -77,7 +78,7 @@ def detail(request, slug):
         form = CommentForm()
 
     context = {
-
+        'student':count,
         "md": md,
         "vid": vid,
         "p": p,

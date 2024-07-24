@@ -4,7 +4,7 @@ urlpatterns = [
     path("",views.index,name="index"),
     path("all/package/",views.all_package,name="all_pkg"),
     path("all/blog/",views.all_blog,name="all_blog"),
-    path("history/purchase/",views.send_reply,name="history"),
+    path("history/purchase/",views.purchase_history,name="history"),
     path('reply/to/<int:pk>/',views.send_reply,name="reply"),
 
 

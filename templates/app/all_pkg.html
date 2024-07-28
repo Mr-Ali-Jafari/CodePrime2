@@ -4,17 +4,16 @@
 {% block body %}
 
 <style>
-    .icon-buy {
-        position: absolute;
-        background-color: rgb(255, 153, 0);
-        color: white;
-        margin: 10px;
-        padding: 10px;
-        border-radius: 100%;
-    }
+.star-icon{
+
+    background-color: rgb(0, 255, 191);
+    color: white;
+
+
+}
     .course {
         max-width: 400px;
-        margin: auto;
+
         margin-bottom: 10px;
     }
     .flex {
@@ -44,37 +43,34 @@
             </svg>
         </button>
     </form>
-    <br><br>
-    <div class="flex" style="display: flex;">
+    <br><br><br>
+    <div class="flex" style="display: flex; flex-wrap: wrap;">
         <!-- start card -->
         {% for i in md %}
-            <div class="card col-md-12 course">
-                <img src="{{ i.img.url }}" class="card-img-top" alt="...">
-                <div class="icon-buy">
+            <div class="card col-md-12 course" style="position: relative; margin: 10px; flex: 1 1 calc(33.333% - 20px); box-sizing: border-box;">
+                <img src="{{i.img.url}}" class="card-img-top" alt="..." style="width: 100%; height: auto;">
+                <div class="star-icon" style="position: absolute; top: 10px; left: 10px;  padding: 5px; border-radius: 50%;">
                     <strong>5.0</strong>
                 </div>
                 <div class="card-body">
-                    <strong class="card-text" style="text-align: center; display: block;">
-                        <a href="{% url 'detail' i.slug %}">{{ i.title }}</a>
-                    </strong>
+                    <strong class="card-text" style="text-align: center; display: block;"><a href="{% url 'detail' i.slug %}">{{i.title}}</a></strong>
                     <div class="spans" style="display: flex; justify-content: space-between;">
-                        <span>قیمت : {{ i.price|intcomma }}</span>
-                        <span>مدرس: {{ i.user.first_name }} {{ i.user.last_name }}</span>
+                        <span>قیمت : {{i.price|intcomma}}</span>
+                        <span>مدرس: {{i.user.first_name}} {{i.user.last_name}}</span>
                     </div>
                     {% if i.is_active %}
                         <strong style="color: green;">وضعیت دوره: فعال</strong>
                     {% else %}
-                        <strong style="color: red;">وضعیت دوره: درحال ضبط</strong>
+                        <strong style="color: red;">وضعیت دوره: درحال ظبط</strong>
                     {% endif %}
                 </div>
             </div>
-            {% empty %}
-            <br><br><br>
-            <h2 style="text-align: center;">دوره‌ای وجود ندارد</h2>
+        {% empty %}
+        <p >دوره ای وجود ندارد</p>
         {% endfor %}
         <!-- End Card -->
     </div>
+    <br><br><br>
 </div>
-<br><br><br>
 
 {% endblock %}

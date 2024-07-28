@@ -5,43 +5,51 @@
 {% endblock %}
 {% block body %}
 <style>
-    .flex-container{
+    .flex-container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        justify-content: center;
     }
-    .c1{
+    .c1 {
         flex: 1 1 800px;
         direction: rtl;
         border-radius: 0;
         margin: 10px;
+        max-width: 100%;
     }
-    .c2{
+    .c2 {
         flex: 1 1 800px;
         direction: rtl;
         border-radius: 0;
         margin: 10px;
+        max-width: 100%;
     }
-    .blog{
+    .blog {
         margin: 30px;
+        text-align: center;
     }
-    .tag{
+    .blog img {
+        max-width: 100%;
+        height: auto;
+    }
+    .tag {
         margin: 30px;
         color: orange;
     }
-    .desc{
+    .desc {
         margin-right: 60px;
     }
     @media only screen and (max-width: 600px) {
         .flex-container {
-            flex-direction: column-reverse;
+            flex-direction: column;
         }
         .c1, .c2 {
             flex: 1 1 100%;
             width: 100%;
             margin: 10px 0;
         }
-        .md, .tag, .desc {
+        .blog, .tag, .desc {
             margin: 15px;
         }
         .desc {
@@ -50,12 +58,11 @@
     }
 </style>
 
+<div class="container-fluid">
 <div class="flex-container">
     <div class="card c1">
         <div class="blog">
-            <center>
-                <img src="{{md.img.urls}}" alt="">
-            </center>
+            <img src="{{md.img.url}}" alt="">
         </div>
         <div class="tag">
             <h2># {{md.title}}</h2>
@@ -67,7 +74,7 @@
     </div>
     {% include 'app/profile_teacher.html' %}
 </div>
-
+</div>
 <script src="https://cdn.plyr.io/2.0.15/plyr.js"></script>
 <script>
     plyr.setup("#plyr-youtube");

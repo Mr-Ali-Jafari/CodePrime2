@@ -1,16 +1,16 @@
 {% extends '../base.html' %}
-{% block title %}ریپلای به کامنت{% endblock %}
+{% block title %}ساخت مطلب{% endblock %}
 {% block body %}
 <br><br><br><br><br>
 
 <div class="container">
     <div class="card" style="max-width: 600px; margin: auto;">
-        <form method="post" style="margin: 20px;">
+        <form method="post" style="margin: 20px;" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.media }}
-            {{form.text}}
+            {{form.as_p}}
             <br><br>
-            <center><input class="btn btn-success" type="submit" value="ثبت ریپلای"></center>
+            <center><input class="btn btn-success" type="submit" value="ثبت پست"></center>
         </form>
     </div>
 </div>

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /sudo/su/code/prime/v1/
+Allow: /
+Sitemap: http://www.codeprime.ir/sitemap.xml

@@ -5,6 +5,7 @@ from . import models
 class ProductAdmin(admin.ModelAdmin):
     search_fields = ("user__username",'title',)
     list_filter = ('price','is_active','date')
+    
 @admin.register(models.Blog)
 class BlogAdmin(admin.ModelAdmin):
     search_fields = ("title",)
@@ -12,8 +13,8 @@ class BlogAdmin(admin.ModelAdmin):
 
 @admin.register(models.Video_Product)
 class VideoAdmin(admin.ModelAdmin):
-    search_fields = ("title",'product__title','date')
-    list_filter = ('is_active')
+    search_fields = ("title",'product__title')
+    list_filter = ('is_active','date')
 
 
 
@@ -38,5 +39,5 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(models.Reply)
 class ReplyAdmin(admin.ModelAdmin):
-    search_fields = ("key__title",'user__username')
-    list_filter = ('date')
+    search_fields = ("key__product__title",'user__username')
+    list_filter = ('date',)

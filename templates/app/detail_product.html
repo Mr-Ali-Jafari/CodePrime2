@@ -10,7 +10,6 @@
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 15px;
     margin-bottom: 20px;
     max-width: 800px;
     margin: auto;
@@ -100,7 +99,7 @@
     }
     @media only screen and (max-width: 600px) {
         .flex-container {
-            flex-direction: column-reverse;
+            flex-direction: column;
         }
         .c1, .c2, .c3 {
             flex: 1 1 100%;
@@ -118,7 +117,7 @@
         }
     }
 </style>
-
+<div class="container-fluid">
 <div class="flex-container">
     <div class="card c1">
         <div class="vid">
@@ -129,7 +128,16 @@
         <div class="tag">
             <h2># {{md.title}}</h2>
             <p>{{md.date}}</p>
+          {% if request.user.is_superuser %}
+
+            <strong class="btn btn-dark">
+                <a href="{% url 'add_video' md.id %}" style="color: white; text-decoration: none;">
+                    اضافه کردن ویدیو به پکیج
+                </a>
+            </strong>
+            {% endif %}
         </div>
+
         <div class="desc">
             <h5>{{md.desc|safe}}</h5>
         </div>
@@ -192,7 +200,7 @@
     </div>
     {% include 'app/profile_teacher.html' %}
 </div>
-
+</div>
 <br><br><br>
 
 
@@ -239,10 +247,10 @@
 </div>
 
 <br><br><br>
-
+<div class="container-fluid">
 <form method="post">
     {% csrf_token %}
-    <div class="card" style="max-width: 600px; margin: auto; padding: 10px;">
+    <div class="card" style="max-width: 600px; margin: 20px; padding: 10px;">
         <label for="text">متن :</label>
         {{form.text}}
         <br><br>
@@ -251,6 +259,7 @@
         </center>
     </div>
 </form>
+</div>
 <br><br><br><br>
 
 

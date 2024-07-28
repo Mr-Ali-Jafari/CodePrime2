@@ -3,20 +3,20 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from . import forms
 def register(request):
     if request.user.is_authenticated:
         return redirect('index')
     
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = forms.CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'اکانت شما با نام {username} ساخته شد!')
             return redirect('login')
     else:
-        form = UserCreationForm()
+        form = forms.CustomUserCreationForm()
     
     return render(request, 'account/register.html', {'form': form})
 
@@ -25,14 +25,14 @@ def login_view(request):
         return redirect('index')
     
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = forms.CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             messages.success(request, f'خوش برگشتی، {user.username}!')
             return redirect('index')
     else:
-        form = AuthenticationForm()
+        form = forms.CustomAuthenticationForm()
     
     return render(request, 'account/login.html', {'form': form})
 

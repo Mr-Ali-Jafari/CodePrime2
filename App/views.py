@@ -1,15 +1,31 @@
-from django.shortcuts import render,get_object_or_404,redirect
-from . import models
+from django.shortcuts import render,get_object_or_404,redirect,HttpResponse
+from . import models as model_file
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 import random
 from .forms import *
+from django.conf import settings
+import os
 # Create your views here.
 
+
+
+def robots_txt(request):
+    file_path = os.path.join(settings.STATIC_ROOT, 'robots.txt')
+    with open(file_path) as f:
+        return HttpResponse(f.read(), content_type='text/plain')
+
+
+
+def sitemap_xml(request):
+    file_path = os.path.join(settings.STATIC_ROOT, 'sitemap.xml')
+    with open(file_path) as f:
+        return HttpResponse(f.read(), content_type='text/xml')
+
 def index(request):
-    md = models.Product.objects.all().order_by("-date")[:3]
-    blog = models.Blog.objects.all().order_by("-date").filter(is_active=True)[:3]
+    md = model_file.Product.objects.all().order_by("-date")[:3]
+    blog = model_file.Blog.objects.all().order_by("-date").filter(is_active=True)[:3]
 
     context = {
         "md":md,
@@ -20,7 +36,7 @@ def index(request):
 
 def all_package(request):
     search_query = request.GET.get('search', '')  
-    model = models.Product.objects.all().order_by('-date')
+    model = model_file.Product.objects.all().order_by('-date')
 
     if search_query:
         model = model.filter(title__icontains=search_query)
@@ -30,7 +46,7 @@ def all_package(request):
     return render(request, 'app/all_pkg.html', {'md': model, 'search_query': search_query})
 
 def all_blog(request):
-    blog = models.Blog.objects.all().order_by("-date").filter(is_active=True)
+    blog = model_file.Blog.objects.filter(is_active=True).order_by("-date")
 
     context = {
         "blog":blog,
@@ -40,8 +56,8 @@ def all_blog(request):
 
 @login_required(login_url='/account/login/')
 def purchase_history(request):
-    md = models.Product.objects.all()
-    p = models.Purchase.objects.filter(user=request.user,package__in=md,is_active=True)
+    md = model_file.Product.objects.all()
+    p = model_file.Purchase.objects.filter(user=request.user,package__in=md,is_active=True)
     context = {
         "p":p,
     }
@@ -50,32 +66,34 @@ def purchase_history(request):
 
 
 def detail(request, slug):
-    md = get_object_or_404(models.Product, slug=slug)
-    p = models.Purchase.objects.filter(package=md)
-    count = models.Purchase.objects.filter(package=md,is_active=True).count()
-    comment_md = models.Comment.objects.filter(product=md, is_active=True)
-    vid = models.Video_Product.objects.filter(product=md, is_active=True)
+    md = get_object_or_404(model_file.Product, slug=slug)
+    p = model_file.Purchase.objects.filter(package=md)
+    count = model_file.Purchase.objects.filter(package=md,is_active=True).count()
+    comment_md = model_file.Comment.objects.filter(product=md, is_active=True)
+    vid = model_file.Video_Product.objects.filter(product=md, is_active=True)
 
     replies = {}
     for comment in comment_md:
-        replies[comment.id] = models.Reply.objects.filter(key=comment)
+        replies[comment.id] = model_file.Reply.objects.filter(key=comment)
+
     
     if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            new_comment = form.save(commit=False)
-            new_comment.user = request.user
-            new_comment.product = md
-            if request.user.is_authenticated:
+        if request.user.is_authenticated:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                new_comment = form.save(commit=False)
+                new_comment.user = request.user
+                new_comment.product = md
                 new_comment.save()
-                messages.success(request,'کامت شما بعد از تایید نمایش داده میشود ','success')
+                messages.success(request, 'کامت شما بعد از تایید نمایش داده میشود', 'success')
 
                 return redirect('detail', slug=md.slug)
-            else:
-                messages.error(request,'سید شما هنوز لاگین نکردید ','danger')
-                return redirect("index")
+        else:
+            messages.error(request,'سید اول لاگین کن ','danger')
+            return redirect('login')
     else:
         form = CommentForm()
+
 
     context = {
         'student':count,
@@ -91,7 +109,7 @@ def detail(request, slug):
 
 
 def blog_detail(request,pk):
-    md = models.Blog.objects.get(pk=pk)
+    md = model_file.Blog.objects.get(pk=pk)
     return render(request,"app/detail_blog.html",{
         "md":md,
     })
@@ -123,8 +141,8 @@ def send_reply(request, pk):
 def vid_detail(request,pk):
     p_exists = Purchase.objects.filter(user=request.user,is_active=True).exists()
 
-    if p_exists or get_object_or_404(models.Product,pk=pk).user == request.user:
-        video = get_object_or_404(models.Video_Product, pk=pk)
+    if p_exists or get_object_or_404(model_file.Product,pk=pk).user == request.user:
+        video = get_object_or_404(model_file.Video_Product, pk=pk)
     else:
         messages.error(request,'داداش ما بیایم وقت بزاریم و دوره درست کنیم شما بیای پولم بالاش ندی | جهت شوخی بود اگه میخوای دوره در دسترس هستش حتما بخرش','danger')
         return redirect('index')
@@ -138,7 +156,7 @@ def vid_detail(request,pk):
 
 @login_required(login_url='/account/login/')
 def view_cart(request):
-    cart_items = models.CartItem.objects.filter(user=request.user)
+    cart_items = model_file.CartItem.objects.filter(user=request.user)
     total_price = sum(item.package.price for item in cart_items)
     
     
@@ -148,20 +166,20 @@ def view_cart(request):
 
 @login_required(login_url='/account/login/')
 def add_to_cart(request, pk):
-    package = get_object_or_404(models.Product, pk=pk,is_active=True)
-    cart_item_exists = models.CartItem.objects.filter(user=request.user, package=package).exists()
+    package = get_object_or_404(model_file.Product, pk=pk,is_active=True)
+    cart_item_exists = model_file.CartItem.objects.filter(user=request.user, package=package).exists()
     
     if cart_item_exists:
         messages.warning(request, "این محصول قبلاً به سبد خرید شما اضافه شده است.",'warning')
     else:
-        models.CartItem.objects.create(user=request.user, package=package)
+        model_file.CartItem.objects.create(user=request.user, package=package)
         messages.success(request, f"{package.title} به سبد خرید شما اضافه شد.",'success')
     
     return redirect('view_cart')
 
 @login_required(login_url='/account/login/')
 def remove_from_cart(request, pk):
-    cart_item = models.CartItem.objects.get(pk=pk)
+    cart_item = model_file.CartItem.objects.get(pk=pk)
     cart_item.delete()
     messages.success(request, "ایتم مورد نظر از سبد شما حذف شد.",'success')
     return redirect('view_cart')
@@ -169,25 +187,81 @@ def remove_from_cart(request, pk):
 
 @user_passes_test(lambda u: u.is_superuser) 
 def activate_purchase(request, purchase_id):
-    purchase = get_object_or_404(models.Purchase, id=purchase_id)
+    purchase = get_object_or_404(model_file.Purchase, id=purchase_id)
     purchase.is_active = True
     purchase.save()
     return redirect('list_purchases')
 
 @user_passes_test(lambda u: u.is_superuser)
 def list_purchases(request):
-    purchases = models.Purchase.objects.filter(is_active=False)
+    purchases = model_file.Purchase.objects.filter(is_active=False)
     return render(request, 'app/list_purchases.html', {'purchases': purchases})
 
+@user_passes_test(lambda u: u.is_superuser)
+@login_required(login_url='/account/login/')
+def create_blog(request):
+    if request.method == "POST":
+        form = BlogForm(request.POST,request.FILES)
+        if form.is_valid():
+            new = form.save(commit=False)
+            new.user = request.user
+            form.save()
+            messages.success(request,f'مدرس عزیز {request.user} پست شما ساخته شد')
+            return redirect("index")
+    else:
+        form = BlogForm()
+
+    return render(request,'app/create_blog.html',{
+        "form":form,
+    })
 
 
 
+@user_passes_test(lambda u: u.is_superuser)
+@login_required(login_url='/account/login/')
+def create_product(request):
+    if request.method == "POST":
+        form = ProductForm(request.POST,request.FILES)
+        if form.is_valid():
+            new = form.save(commit=False)
+            new.user = request.user
+            form.save()
+            messages.success(request,f'مدرس عزیز {request.user} پکیح شما ساخته شد')
+            return redirect("index")
+    else:
+        form = ProductForm()
+
+    return render(request,'app/create_product.html',{
+        "form":form,
+    })
+
+
+
+
+@user_passes_test(lambda u: u.is_superuser)
+@login_required(login_url='/account/login/')
+def add_vid(request,pk):
+    if request.method == "POST":
+        form = VideoForm(request.POST,request.FILES)
+        if form.is_valid():
+            new = form.save(commit=False)
+            new.user = request.user
+            new.product = Product.objects.get(pk=pk)
+            form.save()
+            messages.success(request,f'مدرس عزیز {request.user} ویدیو شما اضافه شد')
+            return redirect("index")
+    else:
+        form = VideoForm()
+
+    return render(request,'app/add_vid.html',{
+        "form":form,
+    })
 
 
 @login_required(login_url='/account/login/')
 def purchase(request, purchase_id):
-    product = get_object_or_404(models.Product, id=purchase_id)
-    cart_item = models.CartItem.objects.filter(package=product)
+    product = get_object_or_404(model_file.Product, id=purchase_id)
+    cart_item = model_file.CartItem.objects.filter(package=product)
     p = Purchase.objects.filter(user=request.user, package=product)
     if p.exists():
         messages.success(request,"درخواست شما ارسال شده حداقل 24 ساعت صبر کنید تا پکیج ارسال شود با تشکر | آکادمی کدپرایم","success")

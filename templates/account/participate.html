@@ -1,0 +1,69 @@
+{% extends '../base.html' %}
+{% block title %}ساخت پروفایل مدرس{% endblock %}
+{% block body %}
+
+<div class="container">
+    <h3 class="text-center">فرم همکاری :</h3>
+    <br><br>
+    <div class="card mx-auto" style="max-width: 600px;">
+        <form method="post" style="margin: 10px;" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">نام:</label>
+                {{ form.name }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.family.id_for_label }}">نام خانوادگی:</label>
+                {{ form.family }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.gender.id_for_label }}">جنسیت:</label>
+                {{ form.gender }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.number.id_for_label }}">شماره تماس (ترجیها شماره همراه):</label>
+                {{ form.number }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.birthday.id_for_label }}">تاریخ تولد:</label>
+                {{ form.birthday }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.city.id_for_label }}">نام شهر:</label>
+                {{ form.city }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.participate_type.id_for_label }}">نوع همکاری:</label>
+                {{ form.participate_type }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.text.id_for_label }}">شرح سوابق تحصیلی و کاری:</label>
+                {{ form.text }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.info_card.id_for_label }}">آپلود مدارک (کارت ملی یا شناسنامه):</label>
+                {{ form.info_card }}
+            </div>
+            
+            <hr>
+            
+            <p class="text-center my-4">
+                پس از 48 تا 72 ساعت فرم شما بررسی خواهد شد و در صورت تایید با شما تماس گرفته خواهد شد. با تشکر💞
+            </p>
+            
+            <div class="text-center">
+                <input class="btn btn-success" type="submit" value="ثبت فرم">
+            </div>
+        </form>
+    </div>
+</div>
+
+<br><br><br>
+{% endblock %}

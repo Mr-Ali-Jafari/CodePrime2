@@ -5,38 +5,35 @@
 {% endblock %}
 {% block body %}
 <style>
-    .flex-container{
+    .flex-container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        justify-content: center;
     }
-    .c1{
+    .c1 {
         flex: 1 1 800px;
         direction: rtl;
         border-radius: 0;
         margin: 10px;
+        max-width: 100%;
     }
-    .c2{
-        flex: 1 1 800px;
-        direction: rtl;
-        border-radius: 0;
-        margin: 10px;
-    }
-    .vid{
+    .vid {
         margin: 30px;
+        text-align: center;
     }
-    .tag{
+    .tag {
         margin: 30px;
         color: orange;
     }
-    .desc{
-        margin-right: 60px;
+    .desc {
+        margin: 60px;
     }
     @media only screen and (max-width: 600px) {
         .flex-container {
             flex-direction: column;
         }
-        .c1, .c2 {
+        .c1 {
             flex: 1 1 100%;
             width: 100%;
             margin: 10px 0;
@@ -45,11 +42,12 @@
             margin: 15px;
         }
         .desc {
-            margin-right: 15px;
+            margin: 15px;
         }
     }
 </style>
 
+<div class="container-fluid">
 <div class="flex-container">
     <div class="card c1">
         <div class="vid">
@@ -65,7 +63,7 @@
             <h5>{{vid.desc|safe}}</h5>
         </div>
     </div>
-    {% include 'app/profile_teacher.html' %}
+    {% include 'app/profile_teacher.html' with teacher=teacher %}</div>
 </div>
 
 <script src="https://cdn.plyr.io/2.0.15/plyr.js"></script>

@@ -82,18 +82,44 @@ svg.f2 {
     z-index: 0;
     height: 40px;
 }
-.c-cat{
-    background: rgb(255, 255, 255);
-    border-radius: 5px;
-    backdrop-filter: blur(5.5px);
-    -webkit-backdrop-filter: blur(5.5px);
-    width: 10rem;
-    text-align: center;
-    
+/* Container for the cards */
+.flex-2 {
+    display: flex;
+    justify-content: center; /* Center the cards horizontally */
+    gap: 1rem; /* Space between cards */
+    flex-wrap: wrap; /* Allows cards to wrap if needed */
+    align-items: center; /* Aligns items vertically (optional) */
 }
-.c-cat{
-    margin: 10px;
+
+/* Card styles */
+.c-cat {
+    width: 14rem; /* Fixed width for cards */
+    border: 1px solid #ddd; /* Light border for cards */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #fff; /* White background */
+    overflow: hidden; /* Hides overflow content */
+    text-align: center; /* Centers text and SVG */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    padding: 1rem; /* Padding inside card */
+    margin: 1rem; /* Margin around card */
 }
+
+/* Hover effect for cards */
+.c-cat:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+}
+
+/* Text styles inside card */
+.c-cat strong {
+    display: block;
+    margin-top: 1rem; /* Space between SVG and text */
+    font-size: 1.25rem; /* Slightly larger font size */
+    color: #333; /* Dark color for text */
+    font-weight: bold; /* Bold text */
+}
+
 .flex{
     text-align: center;
 }
@@ -127,4 +153,9 @@ svg.f2 {
     .course-btn {
         width: 100%; 
     }
+    .flex-2{
+       justify-content: center;
+    }
+
+
 }

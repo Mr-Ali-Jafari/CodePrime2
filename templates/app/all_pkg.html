@@ -55,7 +55,11 @@
                 <div class="card-body">
                     <strong class="card-text" style="text-align: center; display: block;"><a href="{% url 'detail' i.slug %}">{{i.title}}</a></strong>
                     <div class="spans" style="display: flex; justify-content: space-between;">
+                    {% if i.price == 0 %}
+                        <span>قیمت : <span style="color: green;">رایگان !</span></span>
+                    {% else %}
                         <span>قیمت : {{i.price|intcomma}}</span>
+                    {% endif %}
                         <span>مدرس: {{i.user.first_name}} {{i.user.last_name}}</span>
                     </div>
                     {% if i.is_active %}

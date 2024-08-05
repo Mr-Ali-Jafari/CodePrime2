@@ -19,10 +19,13 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+# from azbankgateways.urls import az_bank_gateways_urls
+
 urlpatterns = [
     path('sudo/su/code/prime/v1/', admin.site.urls),
     path('account/', include("Account.urls")),
     path('', include("App.urls")),
+    # path("bankgateways/", az_bank_gateways_urls()),
 
     
 ]

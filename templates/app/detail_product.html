@@ -88,7 +88,7 @@
         color: orange;
     }
     .desc{
-        margin-right: 60px;
+        margin: 60px;
     }
     .c3{
         width: 500px;
@@ -110,7 +110,7 @@
             margin: 15px;
         }
         .desc {
-            margin-right: 15px;
+            margin: 15px;
         }
         .c3 {
             width: 100%;
@@ -147,14 +147,14 @@
                     <div class="videos card c2">
                         {% if p %}
                             <strong style="margin: 20px;">
-                                <a href="{% url 'video_detail' i.id %}">{{i.title}}</a>
+                                <a href="{% url 'video_detail' i.pk %}">{{i.title}}</a>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16">
                                     <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2"/>
                                 </svg>
                             </strong>
                         {% elif request.user == md.user %}
                             <strong style="margin: 20px;">
-                                <a href="{% url 'video_detail' i.id %}">{{i.title}}</a>
+                                <a href="{% url 'video_detail' i.pk %}">{{i.title}}</a>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16">
                                     <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2"/>
                                 </svg>
@@ -172,33 +172,33 @@
             </ul>
         </div>
 
-        {% if not p and md.is_active and request.user.is_authenticated and md.user != request.user %}
-            <div class="card c3">
-                <strong>خرید کردن {{md.title}}</strong>
-                <p>مبلغ : {{md.price|intcomma}} تومان</p>
-                <p>تعداد هنرجو ها: {{student}}</p>
-
-                <button class="btn btn-success">
-                    <a href="{% url 'add_to_cart' md.id %}" style="color: white; text-decoration: none;">
-                        افزودن به سبد خرید
-                    </a>
-                </button>
-            </div>
-        {% else %}
-            <div class="card c3">
-                <strong>خرید کردن {{md.title}}</strong>
-                <p>مبلغ : {{md.price|intcomma}} تومان</p>
-                <p>تعداد هنرجو ها: {{student}}</p>
-                <button class="btn btn-success disabled">
-                    <a class="disabled" style="color: white; text-decoration: none;">
-                        قابلیت خرید وجود ندارد
-                    </a>
-                </button>
-            </div>
-        {% endif %}
-        <br>
+        {% if not p and md.user != request.user %}
+        <div class="card c3">
+            <strong>خرید کردن {{ md.title }}</strong>
+            <p>مبلغ : {{ md.price|intcomma }} تومان</p>
+            <p>تعداد هنرجو ها: {{ student }}</p>
+            <button class="btn btn-success">
+                <a href="{% url 'add_to_cart' md.id %}" style="color: white; text-decoration: none;">
+                    افزودن به سبد خرید
+                </a>
+            </button>
+        </div>
+    {% else %}
+        <div class="card c3">
+            <strong>خرید کردن {{ md.title }}</strong>
+            <p>مبلغ : {{ md.price|intcomma }} تومان</p>
+            <p>تعداد هنرجو ها: {{ student }}</p>
+            <button class="btn btn-success disabled">
+                <span style="color: white; text-decoration: none;">
+                    قابلیت خرید وجود ندارد
+                </span>
+            </button>
+        </div>
+    {% endif %}
+    <br>
     </div>
-    {% include 'app/profile_teacher.html' %}
+    
+    {% include 'app/profile_teacher.html' with teacher=teacher %}
 </div>
 </div>
 <br><br><br>
@@ -212,7 +212,11 @@
             {% for comment in comments %}
                 <div class="card mb-3">
                     <div class="card-body">
+                        {% if comment.user.is_superuser %}
+                        <h5 class="card-title">{{ comment.user.first_name }} {{ comment.user.last_name }}</h5>
+                        {% else %}
                         <h5 class="card-title">{{ comment.user.username }}</h5>
+                        {% endif %}
                         {% if request.user.is_superuser %}
                         <a href="{% url 'reply' comment.id %}" class="btn btn-dark" style="float: left;">ریپلای</a>
                         {% endif %}
@@ -224,7 +228,7 @@
                                     {% for reply in comment.replies.all %}
                                         <div class="card mb-2">
                                             <div class="card-body">
-                                                <h6 class="card-subtitle mb-2 text-muted">{{ reply.user.username }}</h6>
+                                                <h6 class="card-subtitle mb-2 text-muted">{{ reply.user.first_name }} {{ reply.user.last_name }}</h6>
                                                 <p class="card-text">{{ reply.text }}</p>
                                                 <small class="text-muted">{{ reply.date }}</small>
                                             </div>

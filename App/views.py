@@ -1,4 +1,5 @@
 from django.shortcuts import render,get_object_or_404,redirect,HttpResponse
+from django.http import HttpResponse, Http404
 from . import models as model_file
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -7,21 +8,29 @@ import random
 from .forms import *
 from django.conf import settings
 import os
+from Account.models import Teacher
+
+
+
 # Create your views here.
 
 
 
 def robots_txt(request):
-    file_path = os.path.join(settings.STATIC_ROOT, 'robots.txt')
-    with open(file_path) as f:
-        return HttpResponse(f.read(), content_type='text/plain')
-
-
+    file_path = os.path.join(settings.STATICFILES_DIRS[0], 'robots.txt')  # Assuming STATICFILES_DIRS is a list
+    if os.path.exists(file_path):
+        with open(file_path) as f:
+            return HttpResponse(f.read(), content_type='text/plain')
+    else:
+        return HttpResponse("File not found", status=404)
 
 def sitemap_xml(request):
-    file_path = os.path.join(settings.STATIC_ROOT, 'sitemap.xml')
-    with open(file_path) as f:
-        return HttpResponse(f.read(), content_type='text/xml')
+    file_path = os.path.join(settings.STATICFILES_DIRS[0], 'sitemap.xml')  # Assuming STATICFILES_DIRS is a list
+    if os.path.exists(file_path):
+        with open(file_path) as f:
+            return HttpResponse(f.read(), content_type='text/xml')
+    else:
+        return HttpResponse("File not found", status=404)
 
 def index(request):
     md = model_file.Product.objects.all().order_by("-date")[:3]
@@ -67,11 +76,11 @@ def purchase_history(request):
 
 def detail(request, slug):
     md = get_object_or_404(model_file.Product, slug=slug)
-    p = model_file.Purchase.objects.filter(package=md)
+    p = model_file.Purchase.objects.filter(package=md, user=md.user)
     count = model_file.Purchase.objects.filter(package=md,is_active=True).count()
     comment_md = model_file.Comment.objects.filter(product=md, is_active=True)
     vid = model_file.Video_Product.objects.filter(product=md, is_active=True)
-
+    teacher = Teacher.objects.get(user=md.user)
     replies = {}
     for comment in comment_md:
         replies[comment.id] = model_file.Reply.objects.filter(key=comment)
@@ -103,6 +112,9 @@ def detail(request, slug):
         "form": form,
         "comments": comment_md,
         "replies": replies,
+        "teacher": teacher,
+
+
     }
 
     return render(request, 'app/detail_product.html', context=context)
@@ -110,11 +122,14 @@ def detail(request, slug):
 
 def blog_detail(request,pk):
     md = model_file.Blog.objects.get(pk=pk)
+    teacher = Teacher.objects.get(user=md.user)
     return render(request,"app/detail_blog.html",{
         "md":md,
+        "teacher": teacher,
+
     })
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_staff)
 def send_reply(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     
@@ -137,21 +152,26 @@ def send_reply(request, pk):
     return render(request, "app/reply_admin.html", context=context)
 
 
+
+
+
+
+
 @login_required(login_url='/account/login/')
-def vid_detail(request,pk):
-    p_exists = Purchase.objects.filter(user=request.user,is_active=True).exists()
+def vid_detail(request, pk):
+    video = get_object_or_404(Video_Product, id=pk)
+    product = video.product
+    user = request.user
+    teacher = Teacher.objects.get(user=product.user)
+    is_owner = product.user == user
+    has_purchased = Purchase.objects.filter(user=user, package=product).exists()
 
-    if p_exists or get_object_or_404(model_file.Product,pk=pk).user == request.user:
-        video = get_object_or_404(model_file.Video_Product, pk=pk)
+    if is_owner or has_purchased:
+        return render(request, 'app/detail_vid.html', {'vid': video,'teacher':teacher})
     else:
-        messages.error(request,'داداش ما بیایم وقت بزاریم و دوره درست کنیم شما بیای پولم بالاش ندی | جهت شوخی بود اگه میخوای دوره در دسترس هستش حتما بخرش','danger')
-        return redirect('index')
-    
-    context = {
-        "vid":video,
-    }
+        messages.error(request, 'متاسفانه دوره رو نخریدید میتونید | دوره رو تهیه کنید تا دسترسی داشته باشید ','danger')
+        return redirect('detail',product.slug)
 
-    return render(request,'app/detail_vid.html',context=context)
 
 
 @login_required(login_url='/account/login/')
@@ -166,7 +186,7 @@ def view_cart(request):
 
 @login_required(login_url='/account/login/')
 def add_to_cart(request, pk):
-    package = get_object_or_404(model_file.Product, pk=pk,is_active=True)
+    package = get_object_or_404(model_file.Product, pk=pk)
     cart_item_exists = model_file.CartItem.objects.filter(user=request.user, package=package).exists()
     
     if cart_item_exists:
@@ -197,9 +217,11 @@ def list_purchases(request):
     purchases = model_file.Purchase.objects.filter(is_active=False)
     return render(request, 'app/list_purchases.html', {'purchases': purchases})
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_staff)
 @login_required(login_url='/account/login/')
 def create_blog(request):
+
+        
     if request.method == "POST":
         form = BlogForm(request.POST,request.FILES)
         if form.is_valid():
@@ -210,14 +232,17 @@ def create_blog(request):
             return redirect("index")
     else:
         form = BlogForm()
+    try:
+        return render(request,'app/create_blog.html',{
+            "form":form,
+        })
+    except Teacher.DoesNotExist:
+        messages.error(request,'شما فاقد پروفایل میباشید لطفا اول پروفایل بسازید','danger')
+        return redirect("create_profile")
 
-    return render(request,'app/create_blog.html',{
-        "form":form,
-    })
 
 
-
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_staff)
 @login_required(login_url='/account/login/')
 def create_product(request):
     if request.method == "POST":
@@ -231,16 +256,26 @@ def create_product(request):
     else:
         form = ProductForm()
 
-    return render(request,'app/create_product.html',{
-        "form":form,
-    })
+    try:
+        return render(request,'app/create_product.html',{
+            "form":form,
+        })
+    except Teacher.DoesNotExist:
+        messages.error(request,'شما فاقد پروفایل میباشید لطفا اول پروفایل بسازید','danger')
+        return redirect("create_profile")
 
 
 
-
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_staff)
 @login_required(login_url='/account/login/')
 def add_vid(request,pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if product.user != request.user:
+        messages.error(request, 'شما اجازه اضافه کردن ویدیو به این پکیج را ندارید.')
+        return redirect('index')
+    
+
     if request.method == "POST":
         form = VideoForm(request.POST,request.FILES)
         if form.is_valid():
@@ -252,22 +287,27 @@ def add_vid(request,pk):
             return redirect("index")
     else:
         form = VideoForm()
-
-    return render(request,'app/add_vid.html',{
-        "form":form,
-    })
+    try:
+        return render(request,'app/add_vid.html',{
+            "form":form,
+        })
+    except:
+        messages.error(request,'شما فاقد پروفایل میباشید لطفا اول پروفایل بسازید','danger')
+        return redirect("create_profile")
 
 
 @login_required(login_url='/account/login/')
 def purchase(request, purchase_id):
     product = get_object_or_404(model_file.Product, id=purchase_id)
     cart_item = model_file.CartItem.objects.filter(package=product)
-    p = Purchase.objects.filter(user=request.user, package=product)
+    p = model_file.Purchase.objects.filter(user=request.user, package=product)
+
     if p.exists():
-        messages.success(request,"درخواست شما ارسال شده حداقل 24 ساعت صبر کنید تا پکیج ارسال شود با تشکر | آکادمی کدپرایم","success")
+        messages.success(request, "درخواست شما ارسال شده. حداقل 24 ساعت صبر کنید تا پکیج ارسال شود. با تشکر | آکادمی کدپرایم", "success")
         return redirect("index")
+
     if product.price == 0:
-        purchase = Purchase(
+        purchase = model_file.Purchase(
             user=request.user,
             package=product,
             tracking_code=random.randint(0, 10000000),
@@ -275,18 +315,19 @@ def purchase(request, purchase_id):
         )
         purchase.save()
         cart_item.delete()
-        return redirect("detail",product.slug)
-        
+        return redirect("detail", product.slug)
+
     if request.method == 'POST':
         form = PurchaseForm(request.POST, request.FILES)
         if form.is_valid():
             purchase = form.save(commit=False)
             purchase.user = request.user
             purchase.package = product
-            purchase.tracking_code = random.randint(0,10000000)
+            purchase.tracking_code = random.randint(0, 10000000)
             form.save()
             cart_item.delete()
-            return redirect('index') 
+            messages.success(request, "درخواست شما ثبت شد. لطفاً منتظر تایید پرداخت باشید.")
+            return redirect('index')
     else:
         form = PurchaseForm()
 
@@ -295,3 +336,9 @@ def purchase(request, purchase_id):
 
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
+
+
+def products_by_category(request, category_slug):
+    category = get_object_or_404(Category, slug=category_slug)
+    products = Product.objects.filter(categories=category)
+    return render(request, 'app/products_by_category.html', {'category': category, 'products': products})

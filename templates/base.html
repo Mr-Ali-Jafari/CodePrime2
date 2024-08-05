@@ -24,22 +24,29 @@
     <meta property="og:url" content="https://www.codeprime.ir">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="fa_IR">
-
+    <meta name="enamad" content="43514370" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
     {% block header %}{% endblock %} 
 </head>
 <style>
 @font-face {
-    font-family: "lz";
-    src: url('{% static "fonts/lz.ttf" %}');
+    font-family: "jadid";
+    src: url('{% static "fonts/jadid.ttf" %}');
 }
 *{
-    font-family: "lz";
+    font-family: "jadid";
 }
 body {
 
   background-color: #F8F8F8;
   direction: rtl;
+}
+.summer{
+    position: fixed;
+    bottom: 10px;
+
+    z-index: 1000;
+    right: 10px;
 }
 </style>
 <body>
@@ -48,11 +55,17 @@ body {
     {% block body %}{% endblock %}
     {% include 'footer.html' %}
     
+
+      <a href="{% url 'all_pkg' %}" class="summer">
+        <img src="{% static 'index/summer.png' %}" alt="png" style="width: 200px;">
+      </a>
+
     <script type="text/javascript">
         !function(){var i="cuGN5k",a=window,d=document;function g(){var g=d.createElement("script"),s="https://www.goftino.com/widget/"+i,l=localStorage.getItem("goftino_"+i);g.async=!0,g.src=l?s+"?o="+l:s;d.getElementsByTagName("head")[0].appendChild(g);}"complete"===d.readyState?g():a.attachEvent?a.attachEvent("onload",g):a.addEventListener("load",g,!1);}();
       </script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
    <script type="application/ld+json">
     {
       "@context": "https://schema.org",

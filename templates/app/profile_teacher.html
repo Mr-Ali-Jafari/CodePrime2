@@ -1,38 +1,37 @@
 {% load static %}
 <style>
-    .teacher{
+    .teacher {
         width: 90%;
         max-width: 450px;
         height: fit-content;
-        margin-left: 10px;
+        margin: 10px auto; /* تغییر مکان برای مرکز کردن */
         border-radius: 5px;
         background: linear-gradient(#1A3636, #40534C, #677D6A);
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
-    .pic{
+    .pic {
         border-radius: 100%;
         max-width: 150px;
         margin: 20px auto;
     }
-    .about{
+    .about {
         color: white;
         text-align: center;
     }
     @media only screen and (max-width: 600px) {
-        .teacher{
+        .teacher {
             width: 100%;
             margin: auto;
-
         }
-        .pic{
-            max-width: 100px;
+        .pic {
+            max-width: 150px;
             margin: 10px auto;
         }
-        .about h3{
+        .about h3 {
             font-size: 1.5em;
         }
-        .about p{
+        .about p {
             font-size: 1em;
         }
     }
@@ -40,13 +39,13 @@
 
 <div class="card teacher bg-dark">
     <center>
-        <img class="pic" src="{% static 'teacher/ali.png' %}" alt="Ali Jafari">
+        <img class="pic" src="{{ teacher.picture.url }}" alt="{{ teacher.get_full_name }}">
     </center>
     <center>
         <div class="about">
-            <h3>علی جعفری</h3>
-            <p>متولد 1386 برنامه نویس وب</p>
-            <p>6 ساله کدنویسی میکنم😉 امیدوارم از محتوای کدپرایم لذت ببرید </p>
+            <h3>{{ teacher.get_full_name }}</h3>
+            <p>متولد شهر : {{ teacher.city }}</p>
+            <p>{{ teacher.biography|safe }}</p> 
         </div>
     </center>
 </div>

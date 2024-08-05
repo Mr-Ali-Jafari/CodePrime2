@@ -10,6 +10,7 @@ urlpatterns = [
     path('reply/to/<int:pk>/',views.send_reply,name="reply"),
     path("create/blog/",views.create_blog,name="create_blog"),
     path("create/product/",views.create_product,name="create_product"),
+    path('products/category/<slug:category_slug>/', views.products_by_category, name='products_by_category'),
 
     path("add/video/to/product/<int:pk>/",views.add_vid,name="add_video"),
 
@@ -24,7 +25,6 @@ urlpatterns = [
     path('purchases/', views.list_purchases, name='list_purchases'),
     path('activate/<int:purchase_id>/', views.activate_purchase, name='activate_purchase'),
     path('purchase/<int:purchase_id>/', views.purchase, name='purchase'),
-
 
 
 ]

@@ -1,0 +1,19 @@
+{% extends '../base.html' %}
+{% block title %}ساخت پروفایل مدرس{% endblock %}
+{% block body %}
+<br><br><br><br><br>
+
+<div class="container">
+    <div class="card" style="max-width: 600px; margin: auto;">
+        <form method="post" style="margin: 20px;" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }}
+            {{form.as_p}}
+            <br><br>
+            <center><input class="btn btn-success" type="submit" value="ثبت پکیج"></center>
+        </form>
+    </div>
+</div>
+
+<br><br><br>
+{% endblock %}

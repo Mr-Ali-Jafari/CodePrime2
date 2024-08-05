@@ -57,6 +57,8 @@ class ProductForm(forms.ModelForm):
 
             "intro":forms.FileInput(attrs={"class":"form-control"}),
             "img":forms.FileInput(attrs={"class":"form-control"}),
+            "categories":forms.Select(attrs={"class":"form-control"}),
+
 
 
 

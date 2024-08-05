@@ -6,6 +6,17 @@ from ckeditor.fields import RichTextField
 # Create your models here.
 
 
+
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     slug = models.SlugField()
@@ -16,6 +27,7 @@ class Product(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
     price = models.IntegerField()
+    categories = models.ForeignKey(Category, related_name='products', blank=True,on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Title: {self.title} - Who Published: {self.user.username} - date: {JalaliDate(self.date)} - Active ? {self.is_active}"

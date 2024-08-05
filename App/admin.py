@@ -41,3 +41,9 @@ class CommentAdmin(admin.ModelAdmin):
 class ReplyAdmin(admin.ModelAdmin):
     search_fields = ("key__product__title",'user__username')
     list_filter = ('date',)
+
+
+@admin.register(models.Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')
+    search_fields = ('name',)

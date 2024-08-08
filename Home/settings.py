@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'App',
     'django.contrib.humanize',
     'Account',
+    'PadCast',
     'ckeditor',
     'azbankgateways',
 ]

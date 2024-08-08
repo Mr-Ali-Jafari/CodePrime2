@@ -30,15 +30,21 @@
                     <a class="nav-link" href="{% url 'all_blog' %}">مقالات</a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'primecast' %}">پرایم کست ها</a>
+                </li>
+                {% if request.user.is_superuser %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/sudo/su/code/prime/v1/">صفحه ادمین</a>
+                </li>
+
+                {% endif %}
                 {% if request.user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link text-danger" href="{% url 'logout' %}">خروج</a>
                 </li>
                 {% endif %}
                 {% if request.user.is_superuser %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/sudo/su/code/prime/v1/">صفحه ادمین</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'list_purchases' %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bag-fill" viewBox="0 0 16 16">
@@ -47,6 +53,7 @@
                     </a>
                 </li>
                 {% endif %}
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'view_cart' %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">

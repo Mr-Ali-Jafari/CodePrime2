@@ -31,3 +31,7 @@ class Participation(models.Model):
     participate_type = models.CharField(max_length=1000,choices=[("برنامه نویسی",'برنامه نویسی'),('بازاریابی','بازاریابی'),('ادیت','ادیت')])
     text = models.TextField()
     info_card = models.ImageField(upload_to="info/cards/")
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Owned:{self.user.username} - gender: {self.gender} - Active?{self.is_active}"

@@ -25,6 +25,8 @@ urlpatterns = [
     path('sudo/su/code/prime/v1/', admin.site.urls),
     path('account/', include("Account.urls")),
     path('', include("App.urls")),
+    path('primecast/', include("PadCast.urls")),
+
     # path("bankgateways/", az_bank_gateways_urls()),
 
     

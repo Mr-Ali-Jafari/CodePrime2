@@ -1,0 +1,42 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}پرایم کست{% endblock %}
+{% block header %}
+<link rel="stylesheet" href="{% static 'primecast/style.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <h4>
+        <svg style="color: brown;" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-capsule" viewBox="0 0 16 16">
+            <path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429z"/>
+        </svg>
+        پرایم کست ها
+    </h4>
+    <hr>
+    <div class="row">
+    {% for i in md %}
+    <div class="col-md-4 col-sm-6 mb-4">
+        <div class="card bg-dark" style="width: 100%; position: relative;">
+            <strong style="text-align: center; color: white;">پرایم کست</strong>
+            <hr style="color: white;">
+            <h6 style="margin-right:20px; color: white;">{{i.title}}</h6>
+            <small style="margin-right:20px; border: solid 1px white; width: fit-content; border-radius: 5px; padding: 5px; color: white; ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                </svg>
+                شماره {{i.id}}
+            </small>
+            <small style="margin-right:20px; color: white; margin-top: 10px;">صدا از : {{i.user.first_name}} {{ i.user.last_name }}</small>
+            <br>
+            <div class="border-top"></div>
+            <a href="{% url 'detail_padcast' i.slug %}" style="margin: auto; text-decoration: none;"><small style="color: white;">برای گوش دادن کلیک کنید </small></a>      
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

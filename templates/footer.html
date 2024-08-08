@@ -49,8 +49,10 @@
             <li><a href="tel:+989336472907" style="color: white; text-decoration: none;">پشتیبانی</a></li>
             <li><a href="{% url 'all_blog' %}" style="color: white; text-decoration: none;">مقاله ها</a></li>
             <li><a href="{% url 'view_cart' %}" style="color: white; text-decoration: none;">سبد خرید</a></li>
-            <li><a href="#" style="color: white; text-decoration: none;">فرم همکاری</a></li>
-
+            <li><a href="{% url 'create_participate' %}" style="color: white; text-decoration: none;">فرم همکاری</a></li>
+            {% if request.user.is_superuser %}
+            <li><a href="{% url 'create_primecast' %}" style="color: white; text-decoration: none;">ساخت پرایم کست</a></li>
+            {% endif %}
         </div>
     </div>
     <div class="end-side logoes">

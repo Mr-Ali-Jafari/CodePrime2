@@ -1,0 +1,164 @@
+{% extends '../base.html' %}
+
+{% block title %}{{ md.title }}{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="https://cdn.plyr.io/2.0.15/plyr.css">
+{% endblock %}
+
+{% block body %}
+<style>
+    .flex-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .c1 {
+        flex: 1 1 800px;
+        direction: rtl;
+        border-radius: 0;
+        margin: 10px;
+        max-width: 100%;
+    }
+    .blog {
+        margin: 30px;
+        text-align: center;
+    }
+    .blog img {
+        max-width: 100%;
+        height: auto;
+    }
+    .tag {
+        margin: 30px;
+        color: orange;
+    }
+    .desc {
+        margin: 60px;
+    }
+    .audio-player {
+        margin: 30px 0;
+    }
+    .comments-section {
+        margin: 30px;
+        direction: rtl;
+    }
+    .comment-form {
+        margin: 30px 0;
+    }
+    .comment {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    .reply {
+        margin-left: 20px;
+        border-left: 2px solid #ddd;
+        padding-left: 10px;
+    }
+    @media only screen and (max-width: 600px) {
+        .flex-container {
+            flex-direction: column;
+        }
+        .c1 {
+            flex: 1 1 100%;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .blog, .tag, .desc, .audio-player, .comments-section {
+            margin: 15px;
+        }
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="flex-container">
+        <div class="card c1">
+            <div class="blog">
+                <img src="{{ md.banner.url }}" alt="Banner Image">
+            </div>
+            <div class="tag">
+                <h2># {{ md.title }}</h2>
+                <p>{{ md.date }}</p>
+            </div>
+            <div class="desc">
+                <h5>{{ md.desc|safe }}</h5>
+            </div>
+            <div class="audio-player" style=" margin: 10px;">
+                <h6>پخش پرایم کست:</h6>
+                <audio id="audio-player" controls>
+                    <source src="{{ md.voice.url }}" type="audio/mpeg">
+                    مرورگر شما از پخش‌کننده صوتی پشتیبانی نمی‌کند.
+                </audio>
+            </div>
+        </div>
+        {% include 'app/profile_teacher.html' with teacher=teacher %}
+    </div>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>کامنت ها</h3>
+                <div class="mt-4">
+                    {% for comment in comments %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                {% if comment.user.is_superuser %}
+                                <h5 class="card-title">{{ comment.user.first_name }} {{ comment.user.last_name }}</h5>
+                                {% else %}
+                                <h5 class="card-title">{{ comment.user.username }}</h5>
+                                {% endif %}
+                                {% if request.user.is_superuser %}
+                                <a href="{% url 'reply' comment.id %}" class="btn btn-dark" style="float: left;">ریپلای</a>
+                                {% endif %}
+                                <p class="card-text">{{ comment.text }}</p>
+                                <small class="text-muted">{{ comment.date }}</small>
+                                <div class="mt-2">
+                                    {% if comment.replies.all %}
+                                        <div class="ml-4 mt-2">
+                                            {% for reply in comment.replies.all %}
+                                                <div class="card mb-2">
+                                                    <div class="card-body">
+                                                        <h6 class="card-subtitle mb-2 text-muted">{{ reply.user.first_name }} {{ reply.user.last_name }}</h6>
+                                                        <p class="card-text">{{ reply.text }}</p>
+                                                        <small class="text-muted">{{ reply.date }}</small>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>کامنتی ثبت نشده است</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+        </div>
+        
+        <br><br><br>
+        <div class="container-fluid">
+        <form method="post">
+            {% csrf_token %}
+            <div class="card" style="max-width: 600px; margin: 20px; padding: 10px;">
+                <label for="text">متن :</label>
+                {{form.text}}
+                <br><br>
+                <center>
+                    <input type="submit" class="btn btn-success" style="margin: auto; text-align: center;" value="ثبت کامنت">
+                </center>
+            </div>
+        </form>
+        </div>
+</div>
+        <br><br><br><br>
+
+<script src="https://cdn.plyr.io/2.0.15/plyr.js"></script>
+<script>
+    plyr.setup("#audio-player");
+</script>
+{% endblock %}

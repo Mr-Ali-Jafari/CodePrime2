@@ -1,0 +1,10 @@
+
+
+
+    @media (max-width: 600px) {
+        .card {
+            max-width: 100% !important; 
+            box-sizing: border-box; 
+            margin: 0;
+        }
+    }

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import ParticipationForm
@@ -6,7 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test,login_required
 from .models import Teacher,Participation
 from . import forms
-
+from App.models import Product,Blog
+from PadCast.models import PrimeCast
 def register(request):
     if request.user.is_authenticated:
         return redirect('index')
@@ -105,3 +106,23 @@ def create_participate(request):
     return render(request, 'account/participate.html', {
         "form": form,
     })
+
+
+
+@login_required(login_url='/account/login/')
+def profile_detail(request,username):
+    try:
+        profile = get_object_or_404(Teacher,user__username=username)
+        package = Product.objects.filter(user=profile.user)
+        blog = Blog.objects.filter(user=profile.user)
+        primecasts = PrimeCast.objects.filter(user=profile.user)
+        context = {
+            'teacher':profile,
+            'package':package,
+            "blog":blog,
+            "primecast":primecasts,
+        }
+        return render(request,'account/profile_detail.html',context=context)
+    except Teacher.DoesNotExist:
+        messages.warning(request,'هنوز پروفایلی نساختی مدرس عزیز')
+        return redirect("create_profile")

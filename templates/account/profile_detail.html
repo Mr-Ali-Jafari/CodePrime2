@@ -1,0 +1,169 @@
+{% extends '../base.html' %}
+{% block title %}@{{teacher.user.username}}{% endblock %}
+{% load humanize %}
+{% block body %}
+<style>
+    .teacher {
+        width: 100%;
+        height: fit-content;
+        border-radius: 5px;
+        background: linear-gradient(#941448, #751A5C, #3C2684);
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+    }
+    .pic {
+        border-radius: 50%;
+        max-width: 150px;
+        width: 100%;
+        margin: 20px auto;
+    }
+    .about {
+        color: white;
+        text-align: center;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .teacher {
+            padding: 10px;
+        }
+        .pic {
+            max-width: 120px;
+            margin: 10px auto;
+        }
+        .about h3 {
+            font-size: 1.2em;
+        }
+        .about p {
+            font-size: 0.9em;
+        }
+        .row {
+            flex-direction: column; 
+            align-items: center; 
+        }
+        .card {
+            margin: 5px;
+        }
+    }
+
+    @media (min-width: 600px) and (max-width: 992px) {
+        .card {
+            flex: 1 1 calc(50% - 20px);
+        }
+    }
+
+    @media (min-width: 992px) {
+        .card {
+            flex: 1 1 calc(33.333% - 20px);
+        }
+    }
+
+    .course {
+        position: relative;
+        margin: 10px;
+        box-sizing: border-box;
+    }
+
+    .star-icon {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 5px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+    }
+
+    .btn {
+        margin-top: 10px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar for teacher profile -->
+        <aside class="col-lg-15">
+            <div class="card teacher bg-dark">
+                <center>
+                    <img class="pic" src="{{ teacher.picture.url }}" alt="{{ teacher.get_full_name }}">
+                </center>
+                <center>
+                    <div class="about">
+                        <h3>{{ teacher.get_full_name }}</h3>
+                        <p>متولد شهر : {{ teacher.city }}</p>
+                        <p>{{ teacher.biography|safe }}</p> 
+                    </div>
+                </center>
+            </div>
+        </aside>
+    </div>
+        
+            <h3 style="margin-top: 30px;">دوره های {{teacher.user.get_full_name}}</h3>
+        <div class="container-fluid">
+            <div class="row">
+        {% for i in package %}
+            <div class="card col-md-12 course" style="position: relative; margin: 10px; flex: 1 1 calc(33.333% - 20px); box-sizing: border-box;">
+                <img src="{{i.img.url}}" class="card-img-top" alt="..." style="width: 100%; height: auto;">
+                <div class="star-icon" style="position: absolute; top: 10px; left: 10px;  padding: 5px; border-radius: 50%;">
+                    <strong>5.0</strong>
+                </div>
+                <div class="card-body">
+                    <strong class="card-text" style="text-align: center; display: block;"><a href="{% url 'detail' i.slug %}">{{i.title}}</a></strong>
+                    <div class="spans" style="display: flex; justify-content: space-between;">
+                    {% if i.price == 0 %}
+                        <span>قیمت : <span style="color: green;">رایگان !</span></span>
+                    {% else %}
+                        <span>قیمت : {{i.price|intcomma}}</span>
+                    {% endif %}
+                        <span>مدرس: {{i.user.first_name}} {{i.user.last_name}}</span>
+                    </div>
+                    
+                    {% if i.is_active %}
+                        <strong style="color: green;">وضعیت دوره: فعال</strong>
+                    {% else %}
+                        <strong style="color: red;">وضعیت دوره: درحال ظبط</strong>
+                    {% endif %}
+                    <br>
+                    <button style="margin-top: 20px;" class="btn btn-danger">حذف دوره</button>
+                    <button style="margin-top: 20px;" class="btn btn-warning">ادیت دوره</button>
+                    <button style="margin-top: 20px;" class="btn btn-success">اضافه کردن دوره</button>
+
+                </div>
+            </div>
+        {% empty %}
+        <p >دوره ای وجود ندارد</p>
+        {% endfor %}
+    </div>
+</div>
+        
+
+        <h3 style="margin-top: 30px;">مقاله های {{teacher.user.get_full_name}}</h3>
+        <div class="container-fluid">
+        <div class="row">
+        {% for j in blog %}
+                <div class="card col-md-12 course" style="position: relative; flex: 1 1 calc(33.333% - 20px); margin: 10px; box-sizing: border-box;">
+                    <img src="{{j.img.url}}" class="card-img-top" alt="..." style="width: 100%; height: auto;">
+                    <div class="star-icon" style="position: absolute; top: 10px; left: 10px;  padding: 5px; border-radius: 50%;">
+                        <strong>5.0</strong>
+                    </div>
+                    <div class="card-body">
+                        <strong class="card-text" style="text-align: center; display: block;"><a href="{% url 'detail_blog' j.id %}">{{j.title}}</a></strong>
+                        <div class="spans" style="display: flex; justify-content: space-between;">
+                            <span>نوشته از: {{j.user.first_name}} {{j.user.last_name}}</span>
+                        </div>
+                        <button style="margin-top: 20px;" class="btn btn-danger">حذف مطلب</button>
+                        <button style="margin-top: 20px;" class="btn btn-warning">ادیت مطلب</button>
+
+                    </div>
+                </div>
+        
+                {% empty %}
+                <br><br><br>
+                <h2 style="text-align: center;">مقاله ای وجود ندارد</h2>
+                
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+</div>
+
+{% endblock %}

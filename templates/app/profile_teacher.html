@@ -1,12 +1,11 @@
-{% load static %}
 <style>
     .teacher {
         width: 90%;
         max-width: 450px;
         height: fit-content;
-        margin: 10px auto; /* تغییر مکان برای مرکز کردن */
+        margin: 10px; /* تغییر مکان برای مرکز کردن */
         border-radius: 5px;
-        background: linear-gradient(#1A3636, #40534C, #677D6A);
+        background: linear-gradient(#941448, #751A5C, #3C2684);
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
@@ -37,7 +36,7 @@
     }
 </style>
 
-<div class="card teacher bg-dark">
+<div class="card teacher bg-dark col-lg-12">
     <center>
         <img class="pic" src="{{ teacher.picture.url }}" alt="{{ teacher.get_full_name }}">
     </center>

@@ -15,7 +15,7 @@ class Teacher(models.Model):
     city = models.CharField(max_length=1000)
 
     def __str__(self):
-        return f"{self.user} Owned This Profile | {self.name} - {self.family}"
+        return f"{self.user.username} Owned This Profile | {self.name} - {self.family}"
     
 
 class Participation(models.Model):

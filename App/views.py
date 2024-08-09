@@ -76,7 +76,7 @@ def purchase_history(request):
 
 def detail(request, slug):
     md = get_object_or_404(model_file.Product, slug=slug)
-    p = model_file.Purchase.objects.filter(package=md, user=md.user)
+    p = model_file.Purchase.objects.filter(package=md, user=request.user)
     count = model_file.Purchase.objects.filter(package=md,is_active=True).count()
     comment_md = model_file.Comment.objects.filter(product=md, is_active=True)
     vid = model_file.Video_Product.objects.filter(product=md, is_active=True)
@@ -108,7 +108,7 @@ def detail(request, slug):
         'student':count,
         "md": md,
         "vid": vid,
-        "p": p,
+        "p": p.exists(),
         "form": form,
         "comments": comment_md,
         "replies": replies,
@@ -300,7 +300,7 @@ def add_vid(request,pk):
 def purchase(request, purchase_id):
     product = get_object_or_404(model_file.Product, id=purchase_id)
     cart_item = model_file.CartItem.objects.filter(package=product)
-    p = model_file.Purchase.objects.filter(user=request.user, package=product)
+    p = Purchase.objects.filter(user=request.user, package=product)
 
     if p.exists():
         messages.success(request, "درخواست شما ارسال شده. حداقل 24 ساعت صبر کنید تا پکیج ارسال شود. با تشکر | آکادمی کدپرایم", "success")

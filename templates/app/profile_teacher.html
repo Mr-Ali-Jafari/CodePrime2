@@ -42,7 +42,7 @@
     </center>
     <center>
         <div class="about">
-            <h3>{{ teacher.get_full_name }}</h3>
+            <a href="{% url 'profile_detail' teacher.user.username %}" style="color: white; text-decoration:dashed;"><h3>{{ teacher.name }} {{ teacher.family }}</h3></a>
             <p>متولد شهر : {{ teacher.city }}</p>
             <p>{{ teacher.biography|safe }}</p> 
         </div>

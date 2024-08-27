@@ -171,30 +171,45 @@
                 {% endfor %}
             </ul>
         </div>
+        {% if request.user.is_authenticated %}
+            {% if not p and md.user != request.user %}
+            <div class="card c3">
+                <strong>خرید کردن {{ md.title }}</strong>
+                <p>مبلغ : {{ md.price|intcomma }} تومان</p>
+                <p>تعداد هنرجو ها: {{ student }}</p>
+                <button class="btn btn-success">
+                    <a href="{% url 'add_to_cart' md.id %}" style="color: white; text-decoration: none;">
+                        افزودن به سبد خرید
+                    </a>
+                </button>
+            </div>
+        {% else %}
+            <div class="card c3">
+                <strong>خرید کردن {{ md.title }}</strong>
+                <p>مبلغ : {{ md.price|intcomma }} تومان</p>
+                <p>تعداد هنرجو ها: {{ student }}</p>
+                <button class="btn btn-success disabled">
+                    <span style="color: white; text-decoration: none;">
+                        قابلیت خرید وجود ندارد
+                    </span>
+                </button>
+            </div>
+        {% endif %}
 
-        {% if not p and md.user != request.user %}
-        <div class="card c3">
-            <strong>خرید کردن {{ md.title }}</strong>
-            <p>مبلغ : {{ md.price|intcomma }} تومان</p>
-            <p>تعداد هنرجو ها: {{ student }}</p>
-            <button class="btn btn-success">
-                <a href="{% url 'add_to_cart' md.id %}" style="color: white; text-decoration: none;">
-                    افزودن به سبد خرید
-                </a>
-            </button>
-        </div>
     {% else %}
-        <div class="card c3">
-            <strong>خرید کردن {{ md.title }}</strong>
-            <p>مبلغ : {{ md.price|intcomma }} تومان</p>
-            <p>تعداد هنرجو ها: {{ student }}</p>
-            <button class="btn btn-success disabled">
-                <span style="color: white; text-decoration: none;">
-                    قابلیت خرید وجود ندارد
-                </span>
-            </button>
-        </div>
-    {% endif %}
+
+    <div class="card c3">
+        <strong>خرید کردن {{ md.title }}</strong>
+        <p>مبلغ : {{ md.price|intcomma }} تومان</p>
+
+        <button class="btn btn-success">
+            <a href="{% url 'login' %}" style="color: white; text-decoration: none;">
+                هنوز وارد نشده اید :(
+            </a>
+        </button>
+    </div>
+
+   {% endif %} 
     <br>
     </div>
     
@@ -229,7 +244,7 @@
                                         <div class="card mb-2">
                                             <div class="card-body">
                                                 <h6 class="card-subtitle mb-2 text-muted">{{ reply.user.first_name }} {{ reply.user.last_name }}</h6>
-                                                <p class="card-text">{{ reply.text }}</p>
+                                                <p class="card-text">{{ reply.text|safe }}</p>
                                                 <small class="text-muted">{{ reply.date }}</small>
                                             </div>
                                         </div>

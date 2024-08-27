@@ -81,3 +81,26 @@ class VideoForm(forms.ModelForm):
 
 
         }
+
+
+
+class ProductEditForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        exclude = ['user']
+        
+        widgets = {
+            "desc":forms.Textarea(attrs={"class":"form-control"}),
+            "title":forms.TextInput(attrs={"class":"form-control"}),
+            "slug":forms.TextInput(attrs={"class":"form-control"}),
+            "price":forms.NumberInput(attrs={"class":"form-control"}),
+
+
+            "intro":forms.FileInput(attrs={"class":"form-control"}),
+            "img":forms.FileInput(attrs={"class":"form-control"}),
+            "categories":forms.Select(attrs={"class":"form-control"}),
+
+
+
+
+        }

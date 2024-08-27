@@ -26,5 +26,7 @@ urlpatterns = [
     path('activate/<int:purchase_id>/', views.activate_purchase, name='activate_purchase'),
     path('purchase/<int:purchase_id>/', views.purchase, name='purchase'),
 
-
+    #profile
+    path("remove/pkg/<str:slug>/",views.delete_pkg,name="del_pkg"),
+    path("edit/package/<str:slug>/",views.edit_product,name="edit_pckage")
 ]

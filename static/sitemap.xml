@@ -9,112 +9,97 @@
 
 <url>
   <loc>https://codeprime.ir/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
+  <loc>https://codeprime.ir/account/login/?next=/account/create/participate/</loc>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>https://codeprime.ir/account/login/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/all/package/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/all/blog/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://codeprime.ir/primecast/</loc>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/account/login/?next=/view/cart/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/account/login/?next=/history/purchase/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://codeprime.ir/detail/bootstrap-launch-pad/</loc>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/detail/python-for-beginner/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://codeprime.ir/detail/mini-course-security/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/products/category/python/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/products/category/program/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/products/category/security/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/products/category/web/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://codeprime.ir/detail/blog/3/</loc>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/detail/blog/2/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/detail/blog/1/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://codeprime.ir/account/register/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
-  <loc>https://codeprime.ir/account/login/?next=/detail/video/5/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://codeprime.ir/account/login/?next=/detail/video/6/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://codeprime.ir/account/login/?next=/detail/video/7/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://codeprime.ir/account/login/?next=/detail/video/1/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://codeprime.ir/account/login/?next=/detail/video/2/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://codeprime.ir/account/login/?next=/detail/video/3/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://codeprime.ir/account/login/?next=/detail/video/4/</loc>
-  <lastmod>2024-08-04T10:56:02+00:00</lastmod>
+  <loc>https://codeprime.ir/primecast/primecast-01/</loc>
+  <lastmod>2024-08-25T09:30:39+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 

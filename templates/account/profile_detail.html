@@ -22,7 +22,9 @@
         color: white;
         text-align: center;
     }
-
+    .course{
+        max-width: 450px;
+    }
     @media only screen and (max-width: 600px) {
         .teacher {
             padding: 10px;
@@ -37,15 +39,14 @@
         .about p {
             font-size: 0.9em;
         }
-        .row {
-            flex-direction: column; 
-            align-items: center; 
-        }
+
         .card {
             margin: 5px;
         }
     }
-
+    form{
+        display: inline;
+    }
     @media (min-width: 600px) and (max-width: 992px) {
         .card {
             flex: 1 1 calc(50% - 20px);
@@ -77,6 +78,18 @@
     .btn {
         margin-top: 10px;
     }
+
+    .flex {
+        display: flex;
+        text-align: center;
+        
+    }
+    @media only screen and (max-width: 600px) {
+        .flex {
+            flex-direction: column; 
+            align-items: center; 
+        }
+    }
 </style>
 <div class="container-fluid">
     <div class="row">
@@ -99,7 +112,7 @@
         
             <h3 style="margin-top: 30px;">دوره های {{teacher.user.get_full_name}}</h3>
         <div class="container-fluid">
-            <div class="row">
+            <div class="flex">
         {% for i in package %}
             <div class="card col-md-12 course" style="position: relative; margin: 10px; flex: 1 1 calc(33.333% - 20px); box-sizing: border-box;">
                 <img src="{{i.img.url}}" class="card-img-top" alt="..." style="width: 100%; height: auto;">
@@ -123,10 +136,22 @@
                         <strong style="color: red;">وضعیت دوره: درحال ظبط</strong>
                     {% endif %}
                     <br>
-                    <button style="margin-top: 20px;" class="btn btn-danger">حذف دوره</button>
-                    <button style="margin-top: 20px;" class="btn btn-warning">ادیت دوره</button>
-                    <button style="margin-top: 20px;" class="btn btn-success">اضافه کردن دوره</button>
+                    {% if request.user == i.user %}
+                    <form method="POST" action="{% url 'del_pkg' i.slug %}">
+                        {% csrf_token %}
+                        <button type="submit" style="margin-top: 20px;" class="btn btn-danger">حذف دوره</button>
+                    </form>
+                    
+                    <form method="get" action="{% url 'edit_pckage' i.slug %}">
+                        <button type="submit" style="margin-top: 20px;" class="btn btn-warning">ادیت دوره</button>
+                    </form>
+                    
+                    <form method="POST" action="{% url 'add_video' i.id %}">
+                        {% csrf_token %}
+                        <button type="submit" style="margin-top: 20px;" class="btn btn-success">اضافه کردن ویدیو</button>
+                    </form>
 
+                    {% endif %}
                 </div>
             </div>
         {% empty %}
@@ -138,7 +163,7 @@
 
         <h3 style="margin-top: 30px;">مقاله های {{teacher.user.get_full_name}}</h3>
         <div class="container-fluid">
-        <div class="row">
+        <div class="flex">
         {% for j in blog %}
                 <div class="card col-md-12 course" style="position: relative; flex: 1 1 calc(33.333% - 20px); margin: 10px; box-sizing: border-box;">
                     <img src="{{j.img.url}}" class="card-img-top" alt="..." style="width: 100%; height: auto;">
@@ -150,9 +175,10 @@
                         <div class="spans" style="display: flex; justify-content: space-between;">
                             <span>نوشته از: {{j.user.first_name}} {{j.user.last_name}}</span>
                         </div>
+                        {% if request.user == j.user %}
                         <button style="margin-top: 20px;" class="btn btn-danger">حذف مطلب</button>
                         <button style="margin-top: 20px;" class="btn btn-warning">ادیت مطلب</button>
-
+                        {% endif %}
                     </div>
                 </div>
         
@@ -164,6 +190,33 @@
         </div>
     </div>
     </div>
-</div>
 
+    <h3 style="margin-top: 30px;">پرایم کست های {{teacher.user.get_full_name}}</h3>
+    <div class="container-fluid">
+    <div class="flex">
+
+        {% for f in primecast %}
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card bg-dark" style="width: 100%; position: relative;">
+                <strong style="text-align: center; color: white;">پرایم کست</strong>
+                <hr style="color: white;">
+                <h6 style="margin-right:20px; color: white;">{{f.title}}</h6>
+                <small style="margin-right:20px; border: solid 1px white; width: fit-content; border-radius: 5px; padding: 5px; color: white; ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                    </svg>
+                    شماره {{f.id}}
+                </small>
+                <small style="margin-right:20px; color: white; margin-top: 10px;">صدا از : {{f.user.first_name}} {{ f.user.last_name }}</small>
+                <br>
+                <div class="border-top"></div>
+                <a href="{% url 'detail_padcast' f.slug %}" style="margin: auto; text-decoration: none;"><small style="color: white;">برای گوش دادن کلیک کنید </small></a>      
+            </div>
+        </div>
+        {% empty %}
+            <p>پرایم کستی وجود ندارد</p>
+        {% endfor %}
+    </div>
+    </div>
+    
 {% endblock %}

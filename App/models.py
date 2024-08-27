@@ -19,7 +19,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     title = models.CharField(max_length=1000)
     intro = models.FileField(upload_to="intro/product/%Y/")
     img = models.ImageField(upload_to="banners/product/%Y/")

@@ -76,9 +76,12 @@ def purchase_history(request):
 
 def detail(request, slug):
     md = get_object_or_404(model_file.Product, slug=slug)
-    p = model_file.Purchase.objects.filter(package=md, user=request.user)
+    if request.user.is_authenticated:
+        p = model_file.Purchase.objects.filter(package=md,user=request.user).exists()
+    else:
+        p = None
     count = model_file.Purchase.objects.filter(package=md,is_active=True).count()
-    comment_md = model_file.Comment.objects.filter(product=md, is_active=True)
+    comment_md = model_file.Comment.objects.filter(product=md, is_active=True).order_by("-date")
     vid = model_file.Video_Product.objects.filter(product=md, is_active=True)
     teacher = Teacher.objects.get(user=md.user)
     replies = {}
@@ -108,7 +111,7 @@ def detail(request, slug):
         'student':count,
         "md": md,
         "vid": vid,
-        "p": p.exists(),
+        "p": p,
         "form": form,
         "comments": comment_md,
         "replies": replies,
@@ -342,3 +345,49 @@ def products_by_category(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     products = Product.objects.filter(categories=category)
     return render(request, 'app/products_by_category.html', {'category': category, 'products': products})
+
+
+
+@login_required(login_url="login")
+@user_passes_test(lambda u: u.is_staff)
+def delete_pkg(request, slug):
+    package = get_object_or_404(Product, slug=slug)
+    
+    if request.method == 'POST' and request.user == package.user:
+        package.delete()
+        messages.success(request, 'با موفقیت دیلیت شد رفیق')
+        return redirect('profile_detail', username=package.user.username)  
+    
+    return redirect('profile_detail', username=package.user.username) 
+
+
+
+
+@login_required(login_url='/account/login/')
+@user_passes_test(lambda u: u.is_staff)
+def edit_product(request, slug):
+    try:
+        product = get_object_or_404(Product, slug=slug)
+    except Teacher.DoesNotExist:
+        return redirect("create_profile")
+    if product.user != request.user:
+        messages.error(request, 'You do not have permission to edit this product.')
+        return redirect('index')
+
+    if request.method == "POST":
+        form = ProductEditForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            updated_product = form.save(commit=False)
+            updated_product.user = request.user
+            updated_product.save()  
+            messages.success(request, 'پکیج با موفقیت ویرایش شد!')
+            return redirect('index')
+        else:
+            print(form.errors)
+    else:
+        form = ProductEditForm(instance=product)
+
+    return render(request, 'app/edit_product.html', {
+        'form': form,
+        'product': product
+    })
